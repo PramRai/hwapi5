@@ -96,6 +96,12 @@ router.post('/signin', function(req, res) {
 
     });
 });
+router.route('/movies')
+    .get(authJwtController.isAuthenticated, function (req, res) {
+        console.log('gettingmovies');
+
+    })
+
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
