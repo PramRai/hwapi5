@@ -100,7 +100,8 @@ router.route('/movies')
     .get(authJwtController.isAuthenticated, function (req, res) {
         console.log('gettingmovies');
 
-    })
+    });
+
 
 
 app.use('/', router);
