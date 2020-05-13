@@ -8,16 +8,22 @@ var Review = require('./Reviews');
 var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
 var app = express();
-
+var cors = require('cors');
 
 var router = express.Router();
 
-var cors = require('cors');
-module.exports = app; // for testing
+// module.exports = app; // for testing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(passport.initialize());
 app.use(cors());
+
+//router middleware taht will happen on every request
+router.use(function(req, res, next) {
+    console.log(req.method, req.url);
+    next();
+});
 
 router.route('/users/:userId')
     .get(authJwtController.isAuthenticated, function (req, res) {
