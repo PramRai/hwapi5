@@ -171,36 +171,25 @@ router.route('/movie')
 router.route('/movie/:movieid')
     .get(authJwtController.isAuthenticated, function (req, res) {
         var id = req.params.movieid;
-        var needReview = req.query.reviews;
         Movie.findById(id, function (err, movie) {
             if (err) {
                 res.json({message: "Movie not found.\n"});
             }
             else {
-                if (needReview == "true"){
+                if (req.query.reviews == "true"){
+                    Review.find(function(err, reviews) {
+                        if (err) res.send(err);
 
-                    Movie.aggregate([
-                        {
-                            $match: {'_id': mongoose.Types.ObjectId(req.query.movieid)}
-                        },
-
-                        {
-                            $lookup:{
-                                from: 'reviews',
-                                localField: '_id',
-                                foreignField: 'movieid',
-                                as: 'Reviews'
-                            }
-                        }
-                    ],function(err, data) {
-
-                        if(err){
-                            res.send(err);
-                        }else{
-                            res.json(data);
-                        }
+                        Review.find({movietitle: movie.title}).exec(function(err, reviews) {
+                            if (err) res.send(err);
+                            res.json({
+                                movie: movie,
+                                reviews: reviews
+                            });
+                        });
                     });
                 } else {
+                    // return movie, no reviews
                     res.json(movie);
                 }
             }
