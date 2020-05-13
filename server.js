@@ -89,7 +89,7 @@ router.post('/signin', function(req, res) {
 });
 
 //for the movie
-router.route('/movies')
+router.route('/movie')
     //save movie
     .post(authJwtController.isAuthenticated, function (req, res) {
         console.log(req.body);
@@ -168,7 +168,7 @@ router.route('/movies')
                 res.json({msg :"Movie is deleted"})
         })
     });
-router.route('/movies/:movieid')
+router.route('/movie/:movieid')
     .get(authJwtController.isAuthenticated, function (req, res) {
         var id = req.params.movieid;
         var needReview = req.query.reviews;
@@ -208,7 +208,7 @@ router.route('/movies/:movieid')
     });
 
 //update movie
-router.route('/movies/:id')
+router.route('/movie/:id')
     .put(authJwtController.isAuthenticated, function (req, res) {
         var conditions = {_id: req.params.id};
         Movie.findOne({title: req.body.title}, function(err, found) {
